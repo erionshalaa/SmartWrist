@@ -1,7 +1,56 @@
-﻿import React from 'react';
+﻿import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function LoginForm() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
+    const [loginError, setLoginError] = useState(false);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (!storedToken) {
+            setIsLoggedIn(false);
+        } else {
+            setIsLoggedIn(true);
+        }
+    }, []); 
+
+    if (isLoggedIn) {
+        return window.location.href = '/';
+    }
+
+
+
+    const handleLogin = async () => {
+        try {
+            setIsLoading(true);
+            const response = await axios.post('https://localhost:7180/api/auth/login', {
+                email,
+                password,
+            });
+
+            if (response.status === 200) {
+                const { token } = response.data;
+                
+                localStorage.setItem('token', token);
+                
+                setIsLoggedIn(true);
+                window.location.href = '/';
+            }
+        } catch (error) {
+            console.error('Error occurred:', error);
+            setLoginError(true);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+
     return (
+
+
         <section className="text-center" style={{ paddingTop: '100px', paddingBottom: '60px' }}>
             <div className="container" style={{ maxWidth: '800px' }}>
                 <div className="card mx-4 mx-md-5 shadow">
@@ -9,13 +58,26 @@ function LoginForm() {
                         <div className="row justify-content-center">
                             <div className="col-lg-10">
                                 <h2 className="fw-bold mb-5">Welcome Back</h2>
-                                <form>
+                               
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    handleLogin();
+                                }}>
+                                    {loginError && ( 
+                                        <div className="alert alert-danger" role="alert">
+                                            Login failed. Please check your credentials.
+                                        </div>
+                                    )}
                                     <div className="form-floating mb-4">
-                                        <input type="email" id="form3Example3" className="form-control form-control-lg" placeholder=" " />
+                                        <input type="email" id="form3Example3" className="form-control form-control-lg" placeholder=" "
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)} />
                                         <label className="form-label" htmlFor="form3Example3">Email address</label>
                                     </div>
                                     <div className="form-floating mb-4">
-                                        <input type="password" id="form3Example4" className="form-control form-control-lg" placeholder=" " />
+                                        <input type="password" id="form3Example4" className="form-control form-control-lg" placeholder=" "
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)} />
                                         <label className="form-label" htmlFor="form3Example4">Password</label>
                                     </div>
                                     <div className="row">
