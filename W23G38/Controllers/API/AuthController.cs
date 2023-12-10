@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using W23G38.Data;
 using W23G38.Models;
 
-namespace W23G38.Controllers
+namespace W23G38.Controllers.API
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -20,7 +20,7 @@ namespace W23G38.Controllers
         }
 
         [HttpPost("login")]
-        
+
         public async Task<IActionResult> Login(LoginModel model)
         {
 
@@ -39,10 +39,11 @@ namespace W23G38.Controllers
         public async Task<IActionResult> Register(RegisterModel model)
         {
 
-            var user = new ApplicationUser { UserName = model.Email, Name = model.Name,Surname = model.Surname,Email = model.Email };
+            var user = new ApplicationUser { UserName = model.Email, Name = model.Name, Surname = model.Surname, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "User");
                 return Ok(new { Message = "Registration successful" });
             }
             else
