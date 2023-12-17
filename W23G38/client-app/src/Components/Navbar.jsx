@@ -75,7 +75,7 @@ function Navbar() {
                                 <a href="/AboutUs" className="nav-link">About</a>
                             </li>
                             <li className="nav-item me-3 ">
-                                <a href="/" className="nav-link">Contact</a>
+                                <a href="/ContactPage" className="nav-link">Contact</a>
                             </li>
                         </ul>
                             <ul class="navbar-nav ms-auto">

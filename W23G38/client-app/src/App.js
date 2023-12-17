@@ -9,6 +9,8 @@ import SignupForm from './Components/SignupForm';
 import LandingPage from './Components/LandingPage';
 import ShoppingCart from './Components/ShoppingCart';
 import AboutUs from './Components/AboutUs';
+import ContactPage from './Components/ContactPage';
+import ContactUs from './Components/ContactUs';
 import './App.css';
 
 
@@ -59,6 +61,8 @@ import './App.css';
                             <Route path="/signup" element={<SignupForm />} />
                             <Route path="/aboutus" element={<AboutUs />} />
                             <Route path="/shoppingcart" element={<ShoppingCart />} />
+                            <Route path="/contactpage" element={<ContactPage />} />
+                            <Route path="/contactus" element={<ContactUs />} />
                         </Routes>
                         <Footer />
                     </AuthContext.Provider>
