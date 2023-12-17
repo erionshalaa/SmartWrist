@@ -69,7 +69,7 @@ function Navbar() {
                                 </ul>
                             </li>
                             <li className="nav-item me-3">
-                                <a href="/" className="nav-link">Products</a>
+                                <a href="/Products" className="nav-link">Products</a>
                             </li>
                             <li className="nav-item me-3">
                                 <a href="/AboutUs" className="nav-link">About</a>

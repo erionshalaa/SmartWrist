@@ -2,7 +2,7 @@
 {
     public class Role
     {
-        public int Id { get; set; } // Primary key for Role entity
+        public int? Id { get; set; }
         public string? Name { get; set; }
     }
 }

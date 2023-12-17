@@ -21,15 +21,30 @@ namespace W23G38.Controllers
             _context = context;
         }
 
-        // GET: Products
+        // GET: Products1
         public async Task<IActionResult> Index()
         {
-            return _context.Products != null ?
-                        View(await _context.Products.ToListAsync()) :
-                        Problem("Entity set 'ApplicationDbContext.Products'  is null.");
+            try
+            {
+                if (_context == null)
+                {
+                    return Problem("ApplicationDbContext is null.");
+                }
+
+                var productsWithCategories = await _context.Products
+                    .Include(p => p.Category) // Ensure Category is included
+                    .ToListAsync();
+
+                return View(productsWithCategories);
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Error: {ex.Message}");
+            }
         }
 
-        // GET: Products/Details/5
+
+        // GET: Products1/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Products == null)
@@ -38,6 +53,7 @@ namespace W23G38.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
@@ -47,18 +63,31 @@ namespace W23G38.Controllers
             return View(product);
         }
 
-        // GET: Products/Create
+        // GET: Products1/Create
         public IActionResult Create()
         {
-            return View();
+            try
+            {
+                if (_context == null)
+                {
+                    return Problem("ApplicationDbContext is null.");
+                }
+
+                ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Error: {ex.Message}");
+            }
         }
 
-        // POST: Products/Create
+        // POST: Products1/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,ImageUrl,AvailableUnits,Description")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,ImageUrl,AvailableUnits,Description,CategoryId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -66,10 +95,11 @@ namespace W23G38.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
-        // GET: Products/Edit/5
+        // GET: Products1/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Products == null)
@@ -82,15 +112,16 @@ namespace W23G38.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
-        // POST: Products/Edit/5
+        // POST: Products1/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, [Bind("Id,Name,Price,ImageUrl,AvailableUnits,Description")] Product product)
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,Name,Price,ImageUrl,AvailableUnits,Description,CategoryId")] Product product)
         {
             if (id != product.Id)
             {
@@ -117,10 +148,11 @@ namespace W23G38.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
-        // GET: Products/Delete/5
+        // GET: Products1/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Products == null)
@@ -129,6 +161,7 @@ namespace W23G38.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
@@ -138,7 +171,7 @@ namespace W23G38.Controllers
             return View(product);
         }
 
-        // POST: Products/Delete/5
+        // POST: Products1/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? id)
@@ -152,14 +185,14 @@ namespace W23G38.Controllers
             {
                 _context.Products.Remove(product);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int? id)
         {
-            return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
