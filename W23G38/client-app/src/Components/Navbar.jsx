@@ -72,7 +72,7 @@ function Navbar() {
                                 <a href="/" className="nav-link">Products</a>
                             </li>
                             <li className="nav-item me-3">
-                                <a href="/" className="nav-link">About</a>
+                                <a href="/AboutUs" className="nav-link">About</a>
                             </li>
                             <li className="nav-item me-3 ">
                                 <a href="/" className="nav-link">Contact</a>
@@ -126,7 +126,7 @@ function Navbar() {
                                     </a>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="/" class="nav-link">
+                                <a href="/ShoppingCart" class="nav-link">
                                         <img src={bagIcon} id="img-item" alt="Shopping Bag" />
                                     </a>
                                     </li>
