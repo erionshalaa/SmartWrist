@@ -11,13 +11,22 @@ namespace W23G38.Data
     {
         public DbSet<Product>? Products { get; set; }
         public DbSet<UserModel>? User { get; set; }
-
+        public DbSet<Category>? Categories { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Product>()
+          .HasOne(p => p.Category)
+          .WithMany(c => c.Products)
+          .HasForeignKey(p => p.CategoryId);
+
+            builder.Entity<Category>()
+               .Property(c => c.Id)
+               .ValueGeneratedOnAdd();
+
             base.OnModelCreating(builder);
 
             builder.Entity<Product>(entity =>
@@ -29,6 +38,7 @@ namespace W23G38.Data
         }
 
         public DbSet<W23G38.Models.UserModel>? UserModel { get; set; }
+
     }
 
 }

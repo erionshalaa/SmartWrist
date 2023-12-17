@@ -76,8 +76,7 @@ function LandingPage() {
             </div>
 
             <section style={{ backgroundColor: '#eee'}}>
-                <div className="container py-5">
-                    <div className="row">
+                
                         <div className="col-md-12 col-lg-4 mb-3 mb-lg-0">
                             <div className="card">
                                 <div className="d-flex justify-content-end p-3">
@@ -114,8 +113,7 @@ function LandingPage() {
 
                             </div>
                         </div>
-                    </div>
-                </div>
+                    
             </section>
 
         </div>

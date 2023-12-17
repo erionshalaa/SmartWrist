@@ -7,6 +7,7 @@ import Loader from './Components/Loader';
 import LoginForm from './Components/LoginForm';
 import SignupForm from './Components/SignupForm';
 import LandingPage from './Components/LandingPage';
+import Products from './Components/Products';
 import './App.css';
 
 
@@ -54,6 +55,7 @@ import './App.css';
                             <Route path="/" element={<LandingPage />} />
                             <Route path="/login" element={<LoginForm />} />
                             <Route path="/signup" element={<SignupForm />} />
+                            <Route path="/products" element={<Products />} />
                         </Routes>
                         <Footer />
                     </AuthContext.Provider>
