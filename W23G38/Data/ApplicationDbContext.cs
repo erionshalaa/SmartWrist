@@ -11,6 +11,9 @@ namespace W23G38.Data
     {
         public DbSet<Product>? Products { get; set; }
         public DbSet<UserModel>? User { get; set; }
+
+        public DbSet<Contact>? Contacts { get; set; }
+
         public DbSet<Category>? Categories { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
