@@ -35,7 +35,7 @@ function ContactPage() {
                                 <br />Whether you have questions about our products, want personalized recommendations, or simply want to share your thoughts with us, we'd love to hear from you. Feel free to reach out for any inquiries, feedback, or assistance. Your satisfaction is our priority!<br />
                             </p>
                             <br />
-                            <a href="/ContactUs" className="btn btn-secondary rounded-pill" style={{ backgroundColor: 'rgba(255, 165, 0, 0.9)', boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)' }}>Contact Us</a>
+                            <a href="/ContactUs" className="btn btn-warning" style={{ border: '1px solid lightgray', boxShadow: '0 8px 16px rgba(0, 0, 0, 0.11)' }}>Contact Us</a>
 
                         </div>
                         <br />

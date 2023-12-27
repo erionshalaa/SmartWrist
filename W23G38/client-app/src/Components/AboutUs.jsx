@@ -6,8 +6,7 @@ import history from '../icons/history.png';
 function AboutUs() {
 
     const containerStyle = {
-        backgroundColor: 'rgba(255, 165, 0, 0.70)', // Set the desired background color
-        padding: '20px', // Add padding for better visibility
+        padding: '20px',
         paddingTop: '70px'
     };
     const aboutUsSectionStyle = {
@@ -17,21 +16,21 @@ function AboutUs() {
         borderRadius: '15px'
     };
     const imageStyle = {
-        maxWidth: '50%', // Adjust the maximum width as needed
+        maxWidth: '50%',
         height: 'auto',
         marginBottom: '10px',
         marginLeft: 'auto',
-        marginRight: 'auto', // Set both left and right margins to auto for centering
-        display: 'block', // Ensure the image is treated as a block element    
+        marginRight: 'auto', 
+        display: 'block',     
     };
 
     const SecondImage = {
-        maxWidth: '65%', // Adjust the maximum width as needed
+        maxWidth: '65%', 
         height: 'auto',
         marginBottom: '5px',
         marginLeft: 'auto',
-        marginRight: 'auto', // Set both left and right margins to auto for centering
-        display: 'block', // Ensure the image is treated as a block element    
+        marginRight: 'auto',
+        display: 'block',  
     };
 
     return (

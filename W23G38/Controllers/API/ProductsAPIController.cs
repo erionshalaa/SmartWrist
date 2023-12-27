@@ -15,6 +15,54 @@ namespace W23G38.Controllers.API
     public class ProductsAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        [HttpGet("ByCategory/{categoryId}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategory(string categoryId)
+        {
+            try
+            {
+                if (_context.Products != null)
+                {
+                    var productsByCategory = await _context.Products
+                        .Where(p => p.CategoryId == categoryId) 
+                        .ToListAsync();
+
+                    return Ok(productsByCategory);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
+
+        [HttpGet("Latest")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetLatestProducts()
+        {
+            try
+            {
+                if (_context.Products != null)
+                {
+                    var latestProducts = await _context.Products
+                        .OrderByDescending(p => p.CreatedDate)
+                        .Take(3) 
+                        .ToListAsync();
+
+                    return Ok(latestProducts);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
 
         public ProductsAPIController(ApplicationDbContext context)
         {

@@ -4,7 +4,7 @@ import axios from 'axios';
 function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [loginError, setLoginError] = useState(false);
 
@@ -15,7 +15,7 @@ function LoginForm() {
         } else {
             setIsLoggedIn(true);
         }
-    }, []); 
+    }, []);
 
     if (isLoggedIn) {
         return window.location.href = '/';
@@ -33,9 +33,9 @@ function LoginForm() {
 
             if (response.status === 200) {
                 const { token } = response.data;
-                
+
                 localStorage.setItem('token', token);
-                
+
                 setIsLoggedIn(true);
                 window.location.href = '/';
             }
@@ -46,7 +46,7 @@ function LoginForm() {
             setIsLoading(false);
         }
     };
-    
+
 
     return (
 
@@ -58,12 +58,12 @@ function LoginForm() {
                         <div className="row justify-content-center">
                             <div className="col-lg-10">
                                 <h2 className="fw-bold mb-5">Welcome Back</h2>
-                               
+
                                 <form onSubmit={(e) => {
                                     e.preventDefault();
                                     handleLogin();
                                 }}>
-                                    {loginError && ( 
+                                    {loginError && (
                                         <div className="alert alert-danger" role="alert">
                                             Login failed. Please check your credentials.
                                         </div>

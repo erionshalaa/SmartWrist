@@ -11,16 +11,26 @@ namespace W23G38.Data
     {
         public DbSet<Product>? Products { get; set; }
         public DbSet<UserModel>? User { get; set; }
-
         public DbSet<Contact>? Contacts { get; set; }
 
         public DbSet<Category>? Categories { get; set; }
+        public DbSet<CartItem>? CartItems { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<CartItem>()
+               .HasOne(ci => ci.Product)
+               .WithMany() 
+               .HasForeignKey(ci => ci.ProductId);
+
+            builder.Entity<CartItem>()
+                .HasOne(ci => ci.User)
+                .WithMany() 
+                .HasForeignKey(ci => ci.UserId);
+
             builder.Entity<Product>()
           .HasOne(p => p.Category)
           .WithMany(c => c.Products)
@@ -40,7 +50,6 @@ namespace W23G38.Data
             });
         }
 
-        public DbSet<W23G38.Models.UserModel>? UserModel { get; set; }
 
     }
 

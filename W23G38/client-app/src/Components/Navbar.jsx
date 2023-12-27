@@ -4,15 +4,25 @@ import searchIcon from '../icons/search.png';
 import userIcon from '../icons/user.png';
 import heartIcon from '../icons/heart.png';
 import bagIcon from '../icons/shopping-bag.png';
+import axios from 'axios';
 
 function Navbar() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         setIsLoggedIn(!!storedToken);
+
+        axios.get('https://localhost:7180/api/CategoriesAPI')
+            .then(response => {
+                setCategories(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+            });
     }, []);
 
     const handleLogin = () => {
@@ -33,6 +43,11 @@ function Navbar() {
     const closeDropdown = () => {
         setShowDropdown(false);
     };
+
+    const handleCategoryClick = categoryId => {
+        window.location.href = `/Products?category=${categoryId}`;
+    };
+
 
     return (
         <div>
@@ -60,12 +75,13 @@ function Navbar() {
                                     Brands
                                 </a>
                                 <ul className="dropdown-menu bg-dark " aria-labelledby="navbarDropdown">
-                                    <li>
-                                        <a href="/" className="dropdown-item btn text-light">Action</a> 
-                                    </li>
-                                    <li>
-                                        <a href="/" className="dropdown-item btn text-light">Action</a>
-                                    </li>
+                                    {categories.map(category => (
+                                        <li key={category.id}>
+                                            <button className="dropdown-item btn text-light" onClick={() => handleCategoryClick(category.id)}>
+                                                {category.name}
+                                            </button>
+                                        </li>
+                                    ))}
                                 </ul>
                             </li>
                             <li className="nav-item me-3">
@@ -115,7 +131,7 @@ function Navbar() {
 
                                 {!isLoggedIn && (
                                     <li className="nav-item">
-                                        <a href="Login" className="nav-link" onClick={handleLogin}>
+                                        <a href="/login" className="nav-link" onClick={handleLogin}>
                                             <img src={userIcon} id="img-item" alt="User" />
                                         </a>
                                     </li>

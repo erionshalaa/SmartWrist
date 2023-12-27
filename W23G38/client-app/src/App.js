@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route,Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
@@ -13,8 +13,7 @@ import AboutUs from './Components/AboutUs';
 import ContactPage from './Components/ContactPage';
 import ContactUs from './Components/ContactUs';
 import './App.css';
-
-
+import ProductDetails from './Components/ProductDetails'; 
 
 
 
@@ -24,7 +23,6 @@ import './App.css';
         const [isLoggedIn, setIsLoggedIn] = useState(false);
 
         useEffect(() => {
-            // Check if the user is logged in when the app starts
             const storedToken = localStorage.getItem('token');
             if (storedToken) {
                 setIsLoggedIn(true);
@@ -33,19 +31,15 @@ import './App.css';
 
         const handleLogin = async (email, password) => {
             try {
-                // Perform login logic here (e.g., send login request to backend)
-                // If login successful, set isLoggedIn to true and store token in local storage
                 setIsLoggedIn(true);
-                localStorage.setItem('token', 'your_token_here'); // Replace with actual token
-
-                // Redirect the user to the desired page after successful login
+                localStorage.setItem('token', 'your_token_here'); 
+                
             } catch (error) {
                 console.error('Login failed:', error);
             }
         };
 
         const handleLogout = () => {
-            // Perform logout logic here (e.g., clear token from local storage, reset state)
             setIsLoggedIn(false);
             localStorage.removeItem('token');
         };
@@ -65,6 +59,7 @@ import './App.css';
                             <Route path="/shoppingcart" element={<ShoppingCart />} />
                             <Route path="/contactpage" element={<ContactPage />} />
                             <Route path="/contactus" element={<ContactUs />} />
+                            <Route path="/products/:productId" element={<ProductDetails />} />
                         </Routes>
                         <Footer />
                     </AuthContext.Provider>

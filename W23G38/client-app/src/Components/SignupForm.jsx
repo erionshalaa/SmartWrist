@@ -12,7 +12,7 @@ function SignupForm() {
     });
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    
+
     const [errors, setErrors] = useState({
         emailError: '',
         passwordError: ''
@@ -57,7 +57,7 @@ function SignupForm() {
                 const data = response.data;
                 console.log(data);
                 alert('Registration was Successful');
-            } 
+            }
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 setEmailExistsError(true);
@@ -145,11 +145,11 @@ function SignupForm() {
                         <div className="row justify-content-center">
                             <div className="col-lg-10">
                                 <h2 className="fw-bold mb-5">Sign up now</h2>
-                                {emailExistsError &&(
+                                {emailExistsError && (
                                     <div className="alert alert-danger" role="alert">
                                         This email is already in use
                                     </div>
-                                       )}
+                                )}
                                 <form onSubmit={handleSubmit}>
                                     <div className="row">
                                         <div className="col-md-6 mb-4">
@@ -189,7 +189,7 @@ function SignupForm() {
                                             <div className="form-floating">
                                                 <input type="password" id="confirmPassword" className="form-control form-control-lg" placeholder=" "
                                                     value={formData.confirmPassword} onChange={handleInputChange} required />
-                                                
+
                                                 <label className="form-label" htmlFor="confirmPassword">Confirm Password</label>
                                             </div>
                                         </div>
