@@ -15,6 +15,7 @@ namespace W23G38.Data
 
         public DbSet<Category>? Categories { get; set; }
         public DbSet<CartItem>? CartItems { get; set; }
+        public DbSet<Wishlist>? Wishlist{ get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }

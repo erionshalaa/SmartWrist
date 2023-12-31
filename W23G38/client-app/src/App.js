@@ -13,7 +13,8 @@ import AboutUs from './Components/AboutUs';
 import ContactPage from './Components/ContactPage';
 import ContactUs from './Components/ContactUs';
 import './App.css';
-import ProductDetails from './Components/ProductDetails'; 
+import ProductDetails from './Components/ProductDetails';
+import Wishlist from './Components/Wishlist'; 
 
 
 
@@ -59,6 +60,7 @@ import ProductDetails from './Components/ProductDetails';
                             <Route path="/shoppingcart" element={<ShoppingCart />} />
                             <Route path="/contactpage" element={<ContactPage />} />
                             <Route path="/contactus" element={<ContactUs />} />
+                            <Route path="/wishlist" element={<Wishlist />} />
                             <Route path="/products/:productId" element={<ProductDetails />} />
                         </Routes>
                         <Footer />

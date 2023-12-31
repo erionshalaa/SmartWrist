@@ -126,7 +126,7 @@ const ShoppingCart = () => {
                                 <th className="text-center">Quantity</th>
                                 <th className="text-center">Price</th>
                                 <th className="text-center">Subtotal</th>
-                                <th className="text-center"><a class="btn btn-sm btn-outline-danger" href="#" onClick={clearCart}>Clear Cart</a></th>
+                                <th className="text-center"><a class="btn btn-sm btn-outline-danger" onClick={clearCart}>Clear Cart</a></th>
                             </tr>
                         </thead>
                         <tbody>

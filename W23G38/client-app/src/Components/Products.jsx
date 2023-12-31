@@ -97,6 +97,48 @@ function ProductList({ categoryId }) {
         }
     };
 
+
+    const handleAddToWishlistClick = async (productId) => {
+        try {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+
+            if (userId) {
+                // Fetch user's wishlist items
+                const wishlistResponse = await axios.get(`https://localhost:7180/api/WishlistsAPI/UserItems`, config);
+                const userWishlistItems = wishlistResponse.data;
+
+                // Check if the product already exists in the wishlist
+                const isProductInWishlist = userWishlistItems.find(item => item.productId === productId);
+
+                if (isProductInWishlist) {
+                    alert('Product already exists in the wishlist!');
+                } else {
+                    // Add product to the wishlist
+                    const response = await axios.post(`https://localhost:7180/api/WishlistsAPI`, {
+                        userId: userId,
+                        productId: productId
+                    }, config);
+
+                    if (response.status === 201) {
+                        alert('Product added to wishlist!');
+                    } else {
+                        alert('Failed to add product to wishlist.');
+                    }
+                }
+            } else {
+                console.log('Please log in to add products to the wishlist.');
+                window.location.href = '/login';
+            }
+        } catch (error) {
+            console.error('Error adding product to wishlist:', error);
+        }
+    };
+
     return (
         <section>
             <h1>Products</h1>
@@ -111,7 +153,7 @@ function ProductList({ categoryId }) {
                                     <div className="card" style={{ cursor: 'pointer' }} >
                                         <div className="d-flex justify-content-end p-3">
                                             <div className="btn-group">
-                                                <button className="btn btn-danger rounded-circle me-2">
+                                                <button className="btn btn-danger rounded-circle me-2" onClick={() => handleAddToWishlistClick(product.id)}>
                                                     <i className="fas fa-heart"></i>
                                                 </button>
                                                 <button className="btn btn-warning rounded-circle text-white" onClick={() => handleAddProductClick(product.id)}>

@@ -13,17 +13,17 @@ namespace W23G38.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CartItemsAPIController : ControllerBase
+    public class WishlistsAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public CartItemsAPIController(ApplicationDbContext context)
+        public WishlistsAPIController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        [HttpGet("UserCartItems")]
-        public async Task<ActionResult<IEnumerable<CartItem>>> GetUserCartItems()
+        [HttpGet("UserItems")]
+        public async Task<ActionResult<IEnumerable<Wishlist>>> GetUserWishlistItems()
         {
             try
             {
@@ -38,12 +38,12 @@ namespace W23G38.Controllers.API
                     {
                         var userId = jwtToken.Subject;
 
-                        var userCartItems = await _context.CartItems
+                        var userWishlistItems = await _context.Wishlist
                             .Where(item => item.UserId == userId)
                             .Include(item => item.Product)
                             .ToListAsync();
 
-                        return Ok(userCartItems);
+                        return Ok(userWishlistItems);
                     }
                 }
 
@@ -51,74 +51,50 @@ namespace W23G38.Controllers.API
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error retrieving cart items: {ex.Message}");
+                return StatusCode(500, $"Error retrieving wishlist items: {ex.Message}");
             }
         }
 
 
-        // GET: api/CartItemsAPI
+        // GET: api/WishlistsAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CartItem>>> GetCartItems()
+        public async Task<ActionResult<IEnumerable<Wishlist>>> GetWishlist()
         {
-            if (_context.CartItems == null)
+            if (_context.Wishlist == null)
             {
                 return NotFound();
             }
-            return await _context.CartItems.ToListAsync();
+            return await _context.Wishlist.ToListAsync();
         }
 
-        // GET: api/CartItemsAPI/5
+        // GET: api/WishlistsAPI/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CartItem>> GetCartItem(int id)
+        public async Task<ActionResult<Wishlist>> GetWishlist(int id)
         {
-            if (_context.CartItems == null)
+            if (_context.Wishlist == null)
             {
                 return NotFound();
             }
-            var cartItem = await _context.CartItems.FindAsync(id);
+            var wishlist = await _context.Wishlist.FindAsync(id);
 
-            if (cartItem == null)
+            if (wishlist == null)
             {
                 return NotFound();
             }
 
-            return cartItem;
-        }
-        [HttpPut("UpdateQuantity/{id}")]
-        public async Task<IActionResult> UpdateCartItemQuantity(int id, [FromBody] int newQuantity)
-        {
-            try
-            {
-                var existingCartItem = await _context.CartItems.FindAsync(id);
-
-                if (existingCartItem == null)
-                {
-                    return NotFound();
-                }
-
-                existingCartItem.Quantity = newQuantity;
-
-                await _context.SaveChangesAsync();
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error updating quantity: {ex.Message}");
-            }
+            return wishlist;
         }
 
-        // PUT: api/CartItemsAPI/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // PUT: api/WishlistsAPI/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCartItem(int id, CartItem cartItem)
+        public async Task<IActionResult> PutWishlist(int id, Wishlist wishlist)
         {
-            if (id != cartItem.CartItemId)
+            if (id != wishlist.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(cartItem).State = EntityState.Modified;
+            _context.Entry(wishlist).State = EntityState.Modified;
 
             try
             {
@@ -126,7 +102,7 @@ namespace W23G38.Controllers.API
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CartItemExists(id))
+                if (!WishlistExists(id))
                 {
                     return NotFound();
                 }
@@ -139,44 +115,48 @@ namespace W23G38.Controllers.API
             return NoContent();
         }
 
-        // POST: api/CartItemsAPI
+        // POST: api/WishlistsAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CartItem>> PostCartItem(CartItem cartItem)
+        public async Task<ActionResult<Wishlist>> PostWishlist(Wishlist wishlist)
         {
-            if (_context.CartItems == null)
+            if (_context.Wishlist == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.CartItems'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Wishlist'  is null.");
             }
-            _context.CartItems.Add(cartItem);
+            _context.Wishlist.Add(wishlist);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCartItem", new { id = cartItem.CartItemId }, cartItem);
+            return CreatedAtAction("GetWishlist", new { id = wishlist.Id }, wishlist);
         }
 
-        // DELETE: api/CartItemsAPI/5
+        // DELETE: api/WishlistsAPI/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCartItem(int id)
+        public async Task<IActionResult> DeleteWishlist(int id)
         {
-            if (_context.CartItems == null)
+            if (_context.Wishlist == null)
             {
                 return NotFound();
             }
-            var cartItem = await _context.CartItems.FindAsync(id);
-            if (cartItem == null)
+            var wishlist = await _context.Wishlist.FindAsync(id);
+            if (wishlist == null)
             {
                 return NotFound();
             }
 
-            _context.CartItems.Remove(cartItem);
+            _context.Wishlist.Remove(wishlist);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        // DELETE: api/CartItemsAPI
+        private bool WishlistExists(int id)
+        {
+            return (_context.Wishlist?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
         [HttpDelete]
-        public async Task<IActionResult> ClearCart()
+        public async Task<IActionResult> ClearWishlist()
         {
             try
             {
@@ -191,11 +171,11 @@ namespace W23G38.Controllers.API
                     {
                         var userId = jwtToken.Subject;
 
-                        var userCartItems = await _context.CartItems
+                        var userWishlistItems = await _context.Wishlist
                             .Where(item => item.UserId == userId)
                             .ToListAsync();
 
-                        _context.CartItems.RemoveRange(userCartItems);
+                        _context.Wishlist.RemoveRange(userWishlistItems);
                         await _context.SaveChangesAsync();
 
                         return NoContent();
@@ -206,12 +186,8 @@ namespace W23G38.Controllers.API
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error clearing cart: {ex.Message}");
+                return StatusCode(500, $"Error clearing wishlist: {ex.Message}");
             }
-        }
-        private bool CartItemExists(int id)
-        {
-            return (_context.CartItems?.Any(e => e.CartItemId == id)).GetValueOrDefault();
         }
     }
 }
