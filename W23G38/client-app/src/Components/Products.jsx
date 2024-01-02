@@ -64,7 +64,6 @@ function ProductList({ categoryId }) {
 
     const handleAddProductClick = async (productId) => {
         try {
-
             const token = localStorage.getItem('token');
             const config = {
                 headers: {
@@ -73,20 +72,27 @@ function ProductList({ categoryId }) {
             };
 
             if (userId) {
-                const cartItemsResponse = await axios.get(`https://localhost:7180/api/CartItemsAPI/UserCartItems`, config);
-                const userCartItems = cartItemsResponse.data;
+                const productDetailsResponse = await axios.get(`https://localhost:7180/api/ProductsAPI/${productId}`, config);
+                const productDetails = productDetailsResponse.data;
 
-                const isProductInCart = userCartItems.find(item => item.productId === productId);
+                if (productDetails.availableUnits === 'Available') {
+                    const cartItemsResponse = await axios.get(`https://localhost:7180/api/CartItemsAPI/UserCartItems`, config);
+                    const userCartItems = cartItemsResponse.data;
 
-                if (isProductInCart) {
-                    alert('Product already added to cart!');
+                    const isProductInCart = userCartItems.find(item => item.productId === productId);
+
+                    if (isProductInCart) {
+                        alert('Product already added to cart!');
+                    } else {
+                        await axios.post(`https://localhost:7180/api/CartItemsAPI`, {
+                            UserId: userId,
+                            ProductId: productId,
+                            Quantity: 1
+                        });
+                        alert('Product added to cart!');
+                    }
                 } else {
-                    await axios.post(`https://localhost:7180/api/CartItemsAPI`, {
-                        UserId: userId,
-                        ProductId: productId,
-                        Quantity: 1
-                    });
-                    alert('Product added to cart!');
+                    alert('Product is not available for purchase.');
                 }
             } else {
                 console.log('Please log in to add products to the cart.');
@@ -96,6 +102,8 @@ function ProductList({ categoryId }) {
             console.error('Error adding product to cart:', error);
         }
     };
+
+
 
 
     const handleAddToWishlistClick = async (productId) => {
@@ -172,7 +180,7 @@ function ProductList({ categoryId }) {
                                             </div>
 
                                             <div className="d-flex justify-content-between mb-2">
-                                                <p className="text-muted mb-0">Available: <span class="fw-bold">{product.availableUnits}</span></p>
+                                                <p className="text-muted mb-0">Status: <span class="fw-bold">{product.availableUnits}</span></p>
                                                 <div className="ms-auto text-warning">
                                                     <i className="fa fa-star"></i>
                                                     <i className="fa fa-star"></i>

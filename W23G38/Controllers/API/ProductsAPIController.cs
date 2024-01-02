@@ -23,7 +23,7 @@ namespace W23G38.Controllers.API
                 if (_context.Products != null)
                 {
                     var productsByCategory = await _context.Products
-                        .Where(p => p.CategoryId == categoryId) 
+                        .Where(p => p.CategoryId == categoryId)
                         .ToListAsync();
 
                     return Ok(productsByCategory);
@@ -38,6 +38,31 @@ namespace W23G38.Controllers.API
                 return StatusCode(500, $"Internal server error: {ex}");
             }
         }
+        [HttpGet("Search")]
+        public IActionResult SearchProducts([FromQuery] string query)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(query))
+                {
+                    return BadRequest("Search query cannot be empty.");
+                }
+
+                 var searchResults = _context.Products
+                .Where(product =>
+                    product.Name.Contains(query) )
+                .ToList();
+
+
+                return Ok(searchResults);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error searching products: {ex.Message}");
+            }
+        }
+
+
 
         [HttpGet("Latest")]
         public async Task<ActionResult<IEnumerable<Product>>> GetLatestProducts()
@@ -48,7 +73,7 @@ namespace W23G38.Controllers.API
                 {
                     var latestProducts = await _context.Products
                         .OrderByDescending(p => p.CreatedDate)
-                        .Take(3) 
+                        .Take(3)
                         .ToListAsync();
 
                     return Ok(latestProducts);

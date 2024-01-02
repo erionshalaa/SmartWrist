@@ -11,6 +11,8 @@ function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [showSearchInput, setShowSearchInput] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
@@ -48,11 +50,32 @@ function Navbar() {
         window.location.href = `/Products?category=${categoryId}`;
     };
 
+    const handleSearchButtonClick = () => {
+        setShowSearchInput(true); 
+    };
+
+    const handleSearch = async () => {
+        try {
+            if (searchQuery.trim() === '') {
+                return;
+            }
+            window.location.href = `/Search?query=${searchQuery}`;
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+        }
+    };
+
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+
 
     return (
         <div>
-
-
 
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style={{ boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.99)' }}>
                 <div className="container">
@@ -95,11 +118,26 @@ function Navbar() {
                             </li>
                         </ul>
                         <ul class="navbar-nav ms-auto">
-                            <li className="nav-item">
-                                <a href="/" class="nav-link">
+                            <li className="nav-item" style={{cursor: 'pointer'} }>
+                                <a className="nav-link" onClick={handleSearchButtonClick}>
                                     <img src={searchIcon} id="img-item" alt="Search" />
                                 </a>
                             </li>
+
+                            {showSearchInput && (
+                                <li className="nav-item mt-1">
+                                    <input
+                                        type="text"
+                                        placeholder="Search products..."
+                                        className="form-control"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        onKeyDown={handleKeyDown}
+                                        onBlur={() => setShowSearchInput(false)}
+                                    />
+                                </li>
+                            )}
+
 
                             {isLoggedIn && (
                                 <li className="nav-item">

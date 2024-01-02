@@ -1,10 +1,6 @@
-﻿
-import React, { useState, useEffect } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-
-<script src="https://kit.fontawesome.com/3459e15a2d.js" crossorigin="anonymous"></script>
 
 const getUserIdFromToken = () => {
     const storedToken = localStorage.getItem('token');
@@ -25,26 +21,29 @@ const getUserIdFromToken = () => {
     }
 };
 
-
-function ProductDetails() {
-    const { productId } = useParams();
-    const [product, setProduct] = useState(null);
+function Search() {
+    const [searchResults, setSearchResults] = useState([]);
+    const searchQuery = new URLSearchParams(window.location.search).get('query');
     const userId = getUserIdFromToken();
 
     useEffect(() => {
-        const fetchProductDetails = async () => {
+        const fetchSearchResults = async () => {
             try {
-                const response = await axios.get(`https://localhost:7180/api/ProductsAPI/${productId}`);
-                setProduct(response.data);
+                if (searchQuery) {
+                    const response = await axios.get(`https://localhost:7180/api/ProductsAPI/Search?query=${searchQuery}`);
+                    setSearchResults(response.data);
+                }
             } catch (error) {
-                console.error('Error fetching product details:', error);
+                console.error('Error fetching search results:', error);
             }
         };
 
-        fetchProductDetails();
-    }, [productId]);
+        fetchSearchResults();
+    }, [searchQuery]);
 
-
+    const handleProductClick = (productId) => {
+        window.location.href = `/products/${productId}`;
+    };
 
     const handleAddProductClick = async (productId) => {
         try {
@@ -82,7 +81,6 @@ function ProductDetails() {
     };
 
 
-
     const handleAddToWishlistClick = async (productId) => {
         try {
             const token = localStorage.getItem('token');
@@ -93,17 +91,13 @@ function ProductDetails() {
             };
 
             if (userId) {
-                // Fetch user's wishlist items
                 const wishlistResponse = await axios.get(`https://localhost:7180/api/WishlistsAPI/UserItems`, config);
                 const userWishlistItems = wishlistResponse.data;
-
-                // Check if the product already exists in the wishlist
                 const isProductInWishlist = userWishlistItems.find(item => item.productId === productId);
 
                 if (isProductInWishlist) {
                     alert('Product already exists in the wishlist!');
                 } else {
-                    // Add product to the wishlist
                     const response = await axios.post(`https://localhost:7180/api/WishlistsAPI`, {
                         userId: userId,
                         productId: productId
@@ -124,50 +118,59 @@ function ProductDetails() {
         }
     };
 
-
     return (
         <div>
-            <h2>Product Details</h2>
-            {product ? (
-                <div style={{ backgroundColor: '#eee' }}>
-                    <div className="container py-5">
-                        <div className="card" >
-                            <div className="row">
-                                <div class="col-sm-7">
-                                    <img src={product.imageUrl}
-                                        className="card-img-top img-fluid " alt="Smart-Watch" style={{ width: '100%', maxHeight: '600px', objectFit: 'contain' }} />
-                                </div>
-
-                                <div class="col-sm-5">
-                                    <div className="card-body">
-                                        <div className="d-flex  mb-3 mt-5">
-                                            <h4 className="mb-0 ">{product.name}</h4>
-                                        </div>
-
-                                        <div className="d-flex  mb-2">
-                                            <p className="text-muted mb-0">Status: <span class="fw-bold">{product.availableUnits}</span></p>
-                                        </div>
-                                        <div className="d-flex  mt-4"><h2 className="text-dark mb-0">${product.price}</h2></div>
-                                        <div className="d-flex  mt-4"><h6 className="text-grey mb-0 lh-3">{product.description}</h6> </div>
-                                        <div className="d-flex mt-5">
-                                            <button className="btn btn-warning" onClick={() => handleAddProductClick(product.id)}
-                                                style={{ marginRight: '10px', border: '1px solid lightgray' }}><i class="fa-solid fa-cart-shopping"
-                                                    style={{ marginRight: '8px' }}></i>Add To Cart
+            <h1>Search Results for "{searchQuery}"</h1>
+            {searchResults.length > 0 ? (
+            <div className="row mx-0">
+                {searchResults.map((product, index) => (
+                    <div key={index} className=" col-lg-3 ">
+                        <div style={{ backgroundColor: '#eee' }}>
+                            <div className="container py-5">
+                                <div className="card" style={{ cursor: 'pointer' }} >
+                                    <div className="d-flex justify-content-end p-3">
+                                        <div className="btn-group">
+                                            <button className="btn btn-danger rounded-circle me-2" onClick={() => handleAddToWishlistClick(product.id)}>
+                                                <i className="fas fa-heart"></i>
                                             </button>
-                                            <button className="btn btn-light" style={{ border: '1px solid lightgray' }} onClick={() => handleAddToWishlistClick(product.id)}><i class="fa-regular fa-heart"></i></button>
+                                            <button className="btn btn-warning rounded-circle text-white" onClick={() => handleAddProductClick(product.id)}>
+                                                <i className="fas fa-shopping-cart"></i>
+                                            </button>
                                         </div>
                                     </div>
-                                </div>
 
+                                    <img src={product.imageUrl} style={{ cursor: 'pointer' }} onClick={() => handleProductClick(product.id)}
+                                        className="card-img-top img-fluid" alt="Smart-Watch" style={{ width: '100%', maxHeight: '250px', objectFit: 'contain' }} />
+
+                                    <div className="card-body">
+                                        <div className="d-flex justify-content-between mb-3">
+                                            <h5 className="mb-0 fw-bold">{product.name}</h5>
+                                            <h5 className="text-dark mb-0">${product.price}</h5>
+                                        </div>
+
+                                        <div className="d-flex justify-content-between mb-2">
+                                            <p className="text-muted mb-0">Status: <span class="fw-bold">{product.availableUnits}</span></p>
+                                            <div className="ms-auto text-warning">
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                ))}
+            </div>
             ) : (
-                <p>Loading product details...</p>
+                <h1 className="d-flex justify-content-center mt-5">No results found for "{searchQuery}"</h1>
             )}
         </div>
     );
 }
 
-export default ProductDetails;
+export default Search;

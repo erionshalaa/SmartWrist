@@ -80,7 +80,6 @@ const Wishlist = () => {
 
     const handleAddProductClick = async (productId) => {
         try {
-
             const token = localStorage.getItem('token');
             const config = {
                 headers: {
@@ -89,20 +88,27 @@ const Wishlist = () => {
             };
 
             if (userId) {
-                const cartItemsResponse = await axios.get(`https://localhost:7180/api/CartItemsAPI/UserCartItems`, config);
-                const userCartItems = cartItemsResponse.data;
+                const productDetailsResponse = await axios.get(`https://localhost:7180/api/ProductsAPI/${productId}`, config);
+                const productDetails = productDetailsResponse.data;
 
-                const isProductInCart = userCartItems.find(item => item.productId === productId);
+                if (productDetails.availableUnits === 'Available') {
+                    const cartItemsResponse = await axios.get(`https://localhost:7180/api/CartItemsAPI/UserCartItems`, config);
+                    const userCartItems = cartItemsResponse.data;
 
-                if (isProductInCart) {
-                    alert('Product already added to cart!');
+                    const isProductInCart = userCartItems.find(item => item.productId === productId);
+
+                    if (isProductInCart) {
+                        alert('Product already added to cart!');
+                    } else {
+                        await axios.post(`https://localhost:7180/api/CartItemsAPI`, {
+                            UserId: userId,
+                            ProductId: productId,
+                            Quantity: 1
+                        });
+                        alert('Product added to cart!');
+                    }
                 } else {
-                    await axios.post(`https://localhost:7180/api/CartItemsAPI`, {
-                        UserId: userId,
-                        ProductId: productId,
-                        Quantity: 1
-                    });
-                    alert('Product added to cart!');
+                    alert('Product is not available for purchase.');
                 }
             } else {
                 console.log('Please log in to add products to the cart.');
@@ -112,6 +118,7 @@ const Wishlist = () => {
             console.error('Error adding product to cart:', error);
         }
     };
+
 
 
     const clearWishlist = async () => {

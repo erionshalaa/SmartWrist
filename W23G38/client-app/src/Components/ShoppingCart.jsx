@@ -45,12 +45,15 @@ const ShoppingCart = () => {
                 },
             };
 
+            if (newQuantity < 1) {
+                newQuantity = 1;
+            }
+
             console.log('Updating quantity:', cartItemId, newQuantity);
 
             const response = await axios.put(`https://localhost:7180/api/CartItemsAPI/UpdateQuantity/${cartItemId}`, newQuantity, config);
 
             console.log('Quantity update response:', response);
-
 
             if (response.status === 204) {
                 fetchUserCartItems();
@@ -59,6 +62,7 @@ const ShoppingCart = () => {
             console.error('Error updating quantity:', error);
         }
     };
+
 
     const deleteCartItem = async (cartItemId) => {
         try {

@@ -31,7 +31,10 @@
             </div>
             <div class="form-group mb-3">
                 <label asp-for="AvailableUnits" class="control-label"></label>
-                <input asp-for="AvailableUnits" class="form-control" />
+                <select asp-for="AvailableUnits" class="form-control" required>
+                    <option value="Available">Available</option>
+                    <option value="Not Available">Not Available</option>
+                </select>
                 <span asp-validation-for="AvailableUnits" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
