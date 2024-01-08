@@ -8,6 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="client-app\src\Components\Cancel.jsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="client-app\src\Components\Cancel.jsx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.25" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.25" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.25" />
@@ -20,7 +28,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.25" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
+	  <PackageReference Include="Stripe.net" Version="43.9.0" />
 	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.0" />
+
   </ItemGroup>
 
 </Project>

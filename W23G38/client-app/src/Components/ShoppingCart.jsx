@@ -182,7 +182,7 @@ const ShoppingCart = () => {
                         <a className="btn btn-outline-secondary" href="/products">Back to Shopping</a>
                     </div>
                     <div className="col-md-6 col-sm-12 mb-3  d-flex justify-content-end">
-                        <a className="btn btn-success" href="#">Checkout</a>
+                        <a className="btn btn-success" href="/checkout">Checkout</a>
                     </div>
                 </div>
             </div>

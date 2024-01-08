@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route,Redirect } from 'react-router-dom';
-import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
 import Loader from './Components/Loader';
@@ -16,7 +15,8 @@ import './App.css';
 import ProductDetails from './Components/ProductDetails';
 import Wishlist from './Components/Wishlist'; 
 import Search from './Components/Search';
-
+import Checkout from './Components/Checkout';
+import Success from './Components/Success';
 
 
     export const AuthContext = React.createContext();
@@ -63,6 +63,8 @@ import Search from './Components/Search';
                             <Route path="/contactus" element={<ContactUs />} />
                             <Route path="/wishlist" element={<Wishlist />} />
                             <Route path="/search" element={<Search />} />
+                            <Route path="/checkout" element={<Checkout />} />
+                            <Route path="/success" element={<Success />} />
                             <Route path="/products/:productId" element={<ProductDetails />} />
                         </Routes>
                         <Footer />
