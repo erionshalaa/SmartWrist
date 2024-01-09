@@ -62,7 +62,8 @@ namespace W23G38.Controllers.API
                     LineItems = lineItems,
                     Mode = "payment",
                     SuccessUrl = "http://localhost:3000/success",
-                    CancelUrl = "http://localhost:3000/checkout",
+                    CancelUrl = "http://localhost:3000/shoppingcart",
+                    BillingAddressCollection = "required"
                 };
 
 

@@ -15,7 +15,6 @@ import './App.css';
 import ProductDetails from './Components/ProductDetails';
 import Wishlist from './Components/Wishlist'; 
 import Search from './Components/Search';
-import Checkout from './Components/Checkout';
 import Success from './Components/Success';
 
 
@@ -63,7 +62,6 @@ import Success from './Components/Success';
                             <Route path="/contactus" element={<ContactUs />} />
                             <Route path="/wishlist" element={<Wishlist />} />
                             <Route path="/search" element={<Search />} />
-                            <Route path="/checkout" element={<Checkout />} />
                             <Route path="/success" element={<Success />} />
                             <Route path="/products/:productId" element={<ProductDetails />} />
                         </Routes>

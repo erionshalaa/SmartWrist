@@ -253,7 +253,7 @@ namespace W23G38.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("W23G38.Models.Category", b =>
@@ -267,7 +267,7 @@ namespace W23G38.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("W23G38.Models.Contact", b =>
@@ -289,7 +289,7 @@ namespace W23G38.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts");
+                    b.ToTable("Contacts", (string)null);
                 });
 
             modelBuilder.Entity("W23G38.Models.Product", b =>
@@ -325,7 +325,7 @@ namespace W23G38.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("W23G38.Models.Role", b =>
@@ -346,7 +346,7 @@ namespace W23G38.Data.Migrations
 
                     b.HasIndex("UserModelID");
 
-                    b.ToTable("Role");
+                    b.ToTable("Role", (string)null);
                 });
 
             modelBuilder.Entity("W23G38.Models.UserModel", b =>
@@ -365,7 +365,7 @@ namespace W23G38.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("W23G38.Models.Wishlist", b =>
@@ -388,7 +388,7 @@ namespace W23G38.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Wishlist");
+                    b.ToTable("Wishlist", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

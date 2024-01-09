@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { loadStripe } from '@stripe/stripe-js';
 
 <script src="https://kit.fontawesome.com/3459e15a2d.js" crossorigin="anonymous"></script>
 
@@ -117,6 +117,25 @@ const ShoppingCart = () => {
         }, 0).toFixed(2);
     };
 
+    const handleClick = async () => {
+        try {
+
+            const sessionResponse = await axios.post('https://localhost:7180/api/PaymentAPI/create-checkout-session', cartItems);
+            const session = sessionResponse.data;
+
+            const stripe = await loadStripe('pk_test_51OVAlQI0XTOHhZpHB5Ko9pKBZNCeVq4etiEYLgJC6KD17ZgebMkJHPJWafKyTbaDRZ13EOxduQZtu95lhITkknZf00ljF0doxg');
+            const result = await stripe.redirectToCheckout({
+                sessionId: session.id,
+
+            });
+
+            if (result.error) {
+                console.error(result.error.message);
+            }
+        } catch (error) {
+            console.error('Error creating checkout session:', error);
+        }
+    };
 
     return (
         <div>
@@ -182,7 +201,7 @@ const ShoppingCart = () => {
                         <a className="btn btn-outline-secondary" href="/products">Back to Shopping</a>
                     </div>
                     <div className="col-md-6 col-sm-12 mb-3  d-flex justify-content-end">
-                        <a className="btn btn-success" href="/checkout">Checkout</a>
+                        <a className="btn btn-success" onClick={handleClick}>Checkout</a>
                     </div>
                 </div>
             </div>
