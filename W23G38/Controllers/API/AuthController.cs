@@ -6,6 +6,7 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 
 namespace W23G38.Controllers.API
 {
@@ -16,13 +17,111 @@ namespace W23G38.Controllers.API
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _config;
+        private readonly ApplicationDbContext _context;
 
-        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration config)
+        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration config, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
+            _context = context;
         }
+
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUserProfile()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString();
+            var userId = "";
+            if (token.StartsWith("Bearer ") && token.Length > 7)
+            {
+                var jwtEncodedString = token.Substring(7);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwtToken = tokenHandler.ReadToken(jwtEncodedString) as JwtSecurityToken;
+
+                if (jwtToken != null)
+                {
+                    userId = jwtToken.Subject;
+                }
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest(new { Message = "User ID not found in claims" });
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound(new { Message = "User not found" });
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var userProfile = new
+            {
+                Email = user.Email,
+                Name = user.Name,
+                Surname = user.Surname,
+                Id = user.Id,
+                Roles = userRoles
+            };
+
+            return Ok(new { Message = "User profile retrieved successfully", Data = userProfile });
+        }
+
+        [HttpPut("updateuser")]
+        public async Task<IActionResult> UpdateUserProfile(UserModel model)
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString();
+            var userId = "";
+            if (token.StartsWith("Bearer ") && token.Length > 7)
+            {
+                var jwtEncodedString = token.Substring(7);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwtToken = tokenHandler.ReadToken(jwtEncodedString) as JwtSecurityToken;
+
+                if (jwtToken != null)
+                {
+                    userId = jwtToken.Subject;
+                }
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest(new { Message = "User ID not found in claims" });
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound(new { Message = "User not found" });
+            }
+
+            var existingUser = await _userManager.FindByEmailAsync(model.Email);
+            if (existingUser != null && existingUser.Id != user.Id)
+            {
+                return BadRequest(new { Message = "Email is already in use" });
+            }
+
+            user.Name = model.Name;
+            user.Surname = model.Surname;
+            user.Email = model.Email;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return Ok(new { Message = "User profile updated successfully" });
+            }
+            else
+            {
+                return BadRequest(new { Message = "Failed to update user profile" });
+            }
+        }
+
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginModel model)

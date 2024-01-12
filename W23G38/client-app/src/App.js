@@ -16,6 +16,7 @@ import ProductDetails from './Components/ProductDetails';
 import Wishlist from './Components/Wishlist'; 
 import Search from './Components/Search';
 import Success from './Components/Success';
+import EditProfile from './Components/EditProfile';
 
 
     export const AuthContext = React.createContext();
@@ -63,6 +64,7 @@ import Success from './Components/Success';
                             <Route path="/wishlist" element={<Wishlist />} />
                             <Route path="/search" element={<Search />} />
                             <Route path="/success" element={<Success />} />
+                            <Route path="/editprofile" element={<EditProfile />} />
                             <Route path="/products/:productId" element={<ProductDetails />} />
                         </Routes>
                         <Footer />

@@ -153,7 +153,7 @@ function Navbar() {
                                         />
                                         <ul className={`dropdown-menu bg-dark ${showDropdown ? 'show' : ''}`}>
                                             <li>
-                                                <a href="/" className="dropdown-item btn text-light " >
+                                                <a href="/editprofile" className="dropdown-item btn text-light " >
                                                     My Account
                                                 </a>
                                             </li>
