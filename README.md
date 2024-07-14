@@ -2,11 +2,12 @@
 
 # <img src="https://github.com/user-attachments/assets/f16be41b-29e7-438e-9290-1a59e011f134" alt="Logo" width="120" height="100">  
 
-This project is developed for the courses **Web Development and Design** and **Introduction to Web Programming**. It is an e-commerce platform designed for selling smart watches. The project features a robust backend built with ASP.NET Core MVC and a dynamic frontend for administrators, also in ASP.NET Core MVC. Additionally, a React.js frontend is implemented for client interactions.
+This project was developed for the courses **Web Development and Design** and **Introduction to Web Programming**. It serves as an e-commerce platform specializing in smart watches. The backend is built using ASP.NET Core MVC, providing a robust foundation. Administrators interact with a dynamic ASP.NET Core MVC frontend, while clients use a React.js frontend for their interactions.
 
+ 
 ## Tech Stack
 
-- **Backend:** ASP.NET Core MVC
+- **Backend:** ASP.NET Core MVC with Entity Framework Core
 - **Admin Frontend:** ASP.NET Core MVC
 - **Client Frontend:** React.js
 - **Database:** MSSQL
@@ -43,10 +44,16 @@ This project is developed for the courses **Web Development and Design** and **I
   - Manage items in users' carts and wishlists
 
 
-### Authentication
+### Authentication and Form Validation
 
 - **JWT Authentication**
   - Secure authentication using JSON Web Tokens (JWT)
+- **Identity**
+  - User management and authentication powered by ASP.NET Core Identity
+- **Form Validation**
+  - Frontend and backend validation for user input to ensure data integrity
+
+
 
 ## Images
 ### Client Perspective
