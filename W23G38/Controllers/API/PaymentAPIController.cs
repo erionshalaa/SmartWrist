@@ -28,7 +28,7 @@ namespace W23G38.Controllers.API
         {
             try
             {
-                StripeConfiguration.ApiKey = "sk_test_51OVAlQI0XTOHhZpHwTbWajt0HeXbwI5zjAapFEL77QpjEc8Hcezxk1Q4AOTRcyTfsU18uLcl6fwqWscw25W2fWcg00ZR2wTivE";
+                StripeConfiguration.ApiKey = "sk_test_<your-env-variable>";
 
                 if (cartItems == null || cartItems.Count == 0)
                 {

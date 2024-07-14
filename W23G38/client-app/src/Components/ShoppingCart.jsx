@@ -123,7 +123,7 @@ const ShoppingCart = () => {
             const sessionResponse = await axios.post('https://localhost:7180/api/PaymentAPI/create-checkout-session', cartItems);
             const session = sessionResponse.data;
 
-            const stripe = await loadStripe('pk_test_51OVAlQI0XTOHhZpHB5Ko9pKBZNCeVq4etiEYLgJC6KD17ZgebMkJHPJWafKyTbaDRZ13EOxduQZtu95lhITkknZf00ljF0doxg');
+            const stripe = await loadStripe('pk_test_<your-env-variable>');
             const result = await stripe.redirectToCheckout({
                 sessionId: session.id,
 

@@ -47,11 +47,7 @@ function ContactUs() {
                                     <button type="submit" className="btn btn-primary btn-lg mb-3 form-control">
                                         Submit
                                     </button>
-                                    <div>
-                                        <p className="mb-0 mt-5">
-                                            Don't have an account? <a href="/signup" className="text-decoration-none fw-bold">Sign Up</a>
-                                        </p>
-                                    </div>
+                                   
                                 </form>
                             </div>
                         </div>
